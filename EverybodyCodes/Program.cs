@@ -7,7 +7,8 @@
 
 #region Day2
 using EverybodyCodes.Day2;
-Parts.Part1();
+//Parts.Part1();
+Parts.Part2();
 #endregion
 
 Console.ReadKey();
