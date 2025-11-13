@@ -46,6 +46,11 @@ public class NameCircularIndex
             }
         }
     }
+
+    public void ResetCurrentIndex()
+    {
+        CurrentIndex = 0;
+    }
 }
 
 
@@ -63,6 +68,14 @@ public static class Parts
     {
         GetNamesAndInstructions(out var names, out var instructions, "inputp2.txt");
         var name = ProcessInstructionsCircular(names, instructions);
+
+        Console.WriteLine(name);
+    }
+
+    public static void Part3()
+    {
+        GetNamesAndInstructions(out var names, out var instructions, "inputp3.txt");
+        var name = ProcessInstructionsCircularSwap(names, instructions);
 
         Console.WriteLine(name);
     }
@@ -90,6 +103,25 @@ public static class Parts
             var steps = int.Parse(instruction.AsSpan(1));
 
             currentNameIndex.SetCurrentIndex(turn == 'L', steps);
+        }
+
+        return names[currentNameIndex.CurrentIndex];
+    }
+
+    private static string ProcessInstructionsCircularSwap(string[] names, string[] instructions)
+    {
+        var currentNameIndex = new NameCircularIndex() { CurrentIndex = 0, MaxIndex = names.Length - 1 };
+        foreach (var instruction in instructions)
+        {
+            Console.WriteLine(string.Join(" | ", names.Select((n, i) => $"{i}:{n}")));
+            Console.WriteLine($"Processing {instruction}");
+            var turn = instruction[0];
+            var steps = int.Parse(instruction.AsSpan(1));
+
+            currentNameIndex.SetCurrentIndex(turn == 'L', steps);
+            Console.WriteLine($"Swap {names[0]} with {names[currentNameIndex.CurrentIndex]}");
+            (names[0], names[currentNameIndex.CurrentIndex]) = (names[currentNameIndex.CurrentIndex], names[0]);
+            currentNameIndex.ResetCurrentIndex();
         }
 
         return names[currentNameIndex.CurrentIndex];
