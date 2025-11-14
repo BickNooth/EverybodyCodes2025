@@ -49,13 +49,21 @@ public static class Parts
         var grid = GenerateGridPoints(topLeftCorner, bottomRightCorner, 101).ToList();
         Console.WriteLine($"Generated {grid.Count} engraving points");
 
-        var engravingPoints = 0;
+        var engravingPoints = grid.Select(ShouldEngravePoint).Sum(success => success ? 1 : 0);
 
-        foreach (var success in grid.Select(ShouldEngravePoint))
-        {
-            Console.WriteLine($"{grid[0].X},{grid[0].Y} Engrave: {success}");
-            engravingPoints += success ? 1 : 0;
-        }
+        Console.WriteLine(engravingPoints);
+    }
+    public static void Part3()
+    {
+        //var topLeftCorner = new ComplexNumber(35300, -64910);
+        var topLeftCorner = new ComplexNumber(-79047, 14068);
+        var bottomRightCorner =
+            ComplexNumber.Add(topLeftCorner, new ComplexNumber(1000, 1000));
+
+        var grid = GenerateGridPoints(topLeftCorner, bottomRightCorner, 1001).ToList();
+        Console.WriteLine($"Generated {grid.Count} engraving points");
+
+        var engravingPoints = grid.Select(ShouldEngravePoint).Sum(success => success ? 1 : 0);
 
         Console.WriteLine(engravingPoints);
     }
