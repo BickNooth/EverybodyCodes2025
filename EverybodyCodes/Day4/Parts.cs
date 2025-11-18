@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 
 namespace EverybodyCodes.Day4;
 
@@ -33,36 +34,27 @@ public static class Parts
 
     public static void Part3()
     {
+        const int firstGearTurns = 100;
+
         GetPipedGears(out var gears, "inputp3.txt");
-        decimal ratio = 0;
-        for (var i = 0; i < gears.Length - 1; i++)
+        var gearSets = gears.Length;
+
+        BigInteger drivingTeethFull = firstGearTurns;
+        BigInteger drivingTeethPart = 1; // Set to 1 to handle first multiplication
+        var currentDrivingTeeth = gears[0].primaryGear;
+
+        for (var i = 1; i < gearSets; i++) // Skip first gear
         {
-            (decimal firstGear, decimal secondGear) = gears[i];
-            (decimal firstNextGear, decimal secondNextGear) = gears[i + 1];
-            if (secondGear == 0)
-            {
-                if (ratio == 0)
-                {
-                    var innerRatio = decimal.Divide(firstGear, firstNextGear);
-                    ratio = firstNextGear * innerRatio;
-                }
-                else
-                {
-                    var innerRatio = decimal.Divide(ratio, firstNextGear);
-                    ratio = firstNextGear * innerRatio;
-                }
-            }
-            else
-            {
-                var pipedRatio = decimal.Divide(ratio, firstNextGear);
-                if (secondNextGear == 0)
-                {
-                    ratio = firstNextGear * pipedRatio;
-                    break;
-                }
-                ratio = secondNextGear * pipedRatio;
-            }
+            var (primaryGear, secondaryGear) = gears[i];
+
+            drivingTeethFull *= currentDrivingTeeth;
+            drivingTeethPart *= primaryGear;
+
+            currentDrivingTeeth = i == gearSets - 1 ? primaryGear : secondaryGear;
         }
+
+        var fullTurnsLast = drivingTeethFull / drivingTeethPart;
+        Console.WriteLine(fullTurnsLast);
     }
 
     private static void GetGears(out int[] gears, string inputLocation)
@@ -74,7 +66,7 @@ public static class Parts
                 .ToArray();
     }
 
-    private static void GetPipedGears(out (int,int)[] gears, string inputLocation)
+    private static void GetPipedGears(out (int primaryGear,int secondaryGear)[] gears, string inputLocation)
     {
         var path = Path.Combine(AppContext.BaseDirectory, "Day4", inputLocation);
         var lines = File.ReadAllLines(path)
