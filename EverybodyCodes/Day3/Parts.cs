@@ -6,12 +6,14 @@ public static class Parts
     {
         GetCrates(out var crates, "inputp1.txt");
         var orderedCrates = crates.Distinct().OrderBy(x => x).Reverse().ToArray();
-        var crateSet = new HashSet<int>();
+
+        var crateSet = new List<int>();
         foreach (var orderedCrate in orderedCrates)
         {
             if (crateSet.Count == 0)
             {
                 crateSet.Add(orderedCrate);
+                continue;
             }
 
             var highestCrateIndex = crateSet.Count - 1;
@@ -28,8 +30,31 @@ public static class Parts
     public static void Part2()
     {
         GetCrates(out var crates, "inputp2.txt");
-        var orderedCrates = crates.Distinct().OrderBy(x => x).Reverse().ToArray();
+        var orderedCrates = crates.Distinct().OrderBy(x => x).ToArray();
+
+        var crateStack = new Stack<int>();
+        foreach (var orderedCrate in orderedCrates)
+        {
+            if (crateStack.Count == 20)
+            {
+                break;
+            }
+            if (crateStack.Count == 0)
+            {
+                crateStack.Push(orderedCrate);
+                PrintCrates(crateStack);
+            }
+
+            if (orderedCrate <= crateStack.Peek()) continue;
+            
+            crateStack.Push(orderedCrate);
+            PrintCrates(crateStack);
+        }
+
+        PrintCrates(crateStack);
+        Console.WriteLine($"Sum of Crates: {crateStack.Sum()}");
     }
+
     public static void Part3() { }
 
     private static void GetCrates(out int[] crates, string inputLocation)
@@ -50,5 +75,6 @@ public static class Parts
     }
 
     private static void PrintCrates(int[] crates) => Console.WriteLine(string.Join(" > ", crates));
-    private static void PrintCrates(HashSet<int> crates) => Console.WriteLine(string.Join(" > ", crates));
+    private static void PrintCrates(List<int> crates) => Console.WriteLine(string.Join(" > ", crates));
+    private static void PrintCrates(Stack<int> crates) => Console.WriteLine(string.Join(" > ", crates.Reverse()));
 }
