@@ -84,7 +84,6 @@ public static class Parts
             {
                 NewCrateStack(orderedCrate);
             }
-            //PrintCrates(crateStacks);
         }
         PrintCrates(crateStacks);
         Console.WriteLine($"Number of stacks: {crateStacks.Count}");
