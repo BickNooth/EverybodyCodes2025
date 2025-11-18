@@ -22,7 +22,7 @@
 #region Day4
 using EverybodyCodes.Day4;
 //Parts.Part1();
-Parts.Part2();
+//Parts.Part2();
 Parts.Part3();
 #endregion
 
