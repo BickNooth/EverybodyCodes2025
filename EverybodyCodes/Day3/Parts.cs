@@ -55,7 +55,48 @@ public static class Parts
         Console.WriteLine($"Sum of Crates: {crateStack.Sum()}");
     }
 
-    public static void Part3() { }
+    public static void Part3()
+    {
+        GetCrates(out var crates, "inputp3.txt");
+        var orderedCrates = crates.OrderBy(x => x).ToArray();
+        PrintCrates(orderedCrates);
+
+        var crateStacks = new List<Stack<int>>();
+        foreach (var orderedCrate in orderedCrates)
+        {
+            if (crateStacks.Count == 0)
+            {
+                NewCrateStack(orderedCrate);
+                continue;
+            }
+
+            var addedCrate = false;
+            foreach (var crateStack in crateStacks)
+            {
+                if (crateStack.Peek() < orderedCrate)
+                {
+                    crateStack.Push(orderedCrate);
+                    addedCrate = true;
+                    break;
+                }
+            }
+            if (!addedCrate)
+            {
+                NewCrateStack(orderedCrate);
+            }
+            //PrintCrates(crateStacks);
+        }
+        PrintCrates(crateStacks);
+        Console.WriteLine($"Number of stacks: {crateStacks.Count}");
+        return;
+
+        void NewCrateStack(int orderedCrate)
+        {
+            var crateStack = new Stack<int>();
+            crateStack.Push(orderedCrate);
+            crateStacks.Add(crateStack);
+        }
+    }
 
     private static void GetCrates(out int[] crates, string inputLocation)
     {
@@ -69,12 +110,17 @@ public static class Parts
             .Split(',', splitOptions)
             .Select(int.Parse)
             .ToArray();
-
-        Console.WriteLine("Crates:");
-        PrintCrates(crates);
     }
 
     private static void PrintCrates(int[] crates) => Console.WriteLine(string.Join(" > ", crates));
     private static void PrintCrates(List<int> crates) => Console.WriteLine(string.Join(" > ", crates));
-    private static void PrintCrates(Stack<int> crates) => Console.WriteLine(string.Join(" > ", crates.Reverse()));
+    private static void PrintCrates(Stack<int> crates) => Console.WriteLine(string.Join(" > ", crates));
+    private static void PrintCrates(List<Stack<int>> crateStacks)
+    {
+        for (var i = 0; i < crateStacks.Count; i++)
+        {
+            var crateStack = crateStacks[i];
+            Console.WriteLine($"Stack {i + 1}: {string.Join(" > ", crateStack)}");
+        }
+    }
 }
