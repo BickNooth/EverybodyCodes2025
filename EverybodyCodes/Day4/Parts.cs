@@ -34,12 +34,10 @@ public static class Parts
 
     public static void Part3()
     {
-        const int firstGearTurns = 100;
-
         GetPipedGears(out var gears, "inputp3.txt");
         var gearSets = gears.Length;
 
-        BigInteger drivingTeethFull = firstGearTurns;
+        BigInteger drivingTeethFull = 100; // Initial turns of first gear
         BigInteger drivingTeethPart = 1; // Set to 1 to handle first multiplication
         var currentDrivingTeeth = gears[0].primaryGear;
 
