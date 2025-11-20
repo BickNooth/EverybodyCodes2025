@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Linq.Expressions;
-using System.Numerics;
+﻿using System.Numerics;
 
 namespace EverybodyCodes.Day5;
 
@@ -84,7 +82,6 @@ public static class Parts
         fishbone.PrintFishbone();
         Console.WriteLine(fishbone.Quality);
     }
-
 
     public static void Part2()
     {
