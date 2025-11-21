@@ -34,7 +34,14 @@
 #endregion
 
 #region Day6
-using EverybodyCodes.Day6;
+//using EverybodyCodes.Day6;
+////Parts.Part1();
+////Parts.Part2();
+////Parts.Part3();
+#endregion
+
+#region Day7
+using EverybodyCodes.Day7;
 //Parts.Part1();
 //Parts.Part2();
 Parts.Part3();
