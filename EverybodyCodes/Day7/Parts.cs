@@ -32,29 +32,26 @@ public static class Parts
     public static void Part3()
     {
         GetNamesAndRules(out var names, out var rules, "inputp3.txt");
-        var validPrefixes = names.Where(name => name.Length <= 11)
-            .Distinct()
-            .Where(name => CheckName(name, rules))
-            .ToArray();
-
-        var validNames = new HashSet<string>();
-        foreach (var validPrefix in validPrefixes)
+        List<string> validNames = [];
+        foreach (var name in names)
         {
-            var namesToProcess = new Queue<string>();
-            namesToProcess.Enqueue(validPrefix);
-            while (namesToProcess.Count > 0)
+            if (!CheckName(name, rules)) continue;
+            var queue = new Queue<string>([name]);
+            while (queue.Count > 0)
             {
-                //Console.WriteLine($"validNames = {validNames.Count} namesToProcess = {namesToProcess.Count}");
-                var currentName = namesToProcess.Dequeue();
-                if (!rules.TryGetValue(currentName.Last(), out var nextChars)) continue;
-                foreach (var nextChar in nextChars)
-                {
-                    var newName = currentName + nextChar;
-                    if (!CheckName(newName, rules)) continue;
+                var currentName = queue.Dequeue();
 
-                    if (validNames.Contains(newName) || newName.Length > 11) continue;
-                    
-                    if (!namesToProcess.Contains(newName)) namesToProcess.Enqueue(newName);
+                var ruleExists = rules.ContainsKey(currentName.Last());
+                if (!ruleExists) continue;
+
+                var rule = rules[currentName.Last()];
+                foreach (var letter in rule)
+                {
+                    var newName = currentName + letter;
+                    if (newName.Length < 11 && !validNames.Contains(newName))
+                    {
+                        queue.Enqueue(newName);
+                    }
 
                     if (newName.Length is >= 7 and <= 11)
                     {
@@ -64,8 +61,7 @@ public static class Parts
             }
         }
 
-        var finishedNames = validNames.ToList().Where(name => name.Length >= 7).ToList();
-        Console.WriteLine($"Count: {validNames.Count}");
+        Console.WriteLine(validNames.Count.ToString());
     }
 
     private static bool CheckName(string name, Dictionary<char, char[]> rules)
